@@ -14,7 +14,7 @@ export default function Home() {
 
   const [assignments, setAssignments] = useState<any[]>([]);
 
-  // 🔄 READ (get assignments)
+  // 🔄 READ
   const fetchAssignments = async () => {
     const res = await axios.get("http://localhost:3000/assignments");
     setAssignments(res.data);
@@ -24,11 +24,10 @@ export default function Home() {
     fetchAssignments();
   }, []);
 
-  // ➕ CREATE (submit)
+  // ➕ CREATE
   const submit = async () => {
     await axios.post("http://localhost:3000/assignments", form);
 
-    // clear form
     setForm({
       studentName: "",
       title: "",
@@ -37,7 +36,15 @@ export default function Home() {
       fileUrl: ""
     });
 
-    // refresh list
+    fetchAssignments();
+  };
+
+  // 🔄 UPDATE
+  const markReviewed = async (id: string) => {
+    await axios.put(`http://localhost:3000/assignments/${id}`, {
+      status: "Reviewed"
+    });
+
     fetchAssignments();
   };
 
@@ -100,6 +107,11 @@ export default function Home() {
           <p><b>Student:</b> {a.studentName}</p>
           <p><b>Subject:</b> {a.subject}</p>
           <p><b>Status:</b> {a.status}</p>
+
+          {/* 🔄 UPDATE BUTTON */}
+          <button onClick={() => markReviewed(a._id)}>
+            Mark Reviewed
+          </button>
         </div>
       ))}
     </div>
