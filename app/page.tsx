@@ -48,6 +48,12 @@ export default function Home() {
     fetchAssignments();
   };
 
+  // ❌ DELETE
+  const remove = async (id: string) => {
+    await axios.delete(`http://localhost:3000/assignments/${id}`);
+    fetchAssignments();
+  };
+
   return (
     <div style={{ padding: "20px" }}>
       <h1>📚 Assignment System</h1>
@@ -108,9 +114,14 @@ export default function Home() {
           <p><b>Subject:</b> {a.subject}</p>
           <p><b>Status:</b> {a.status}</p>
 
-          {/* 🔄 UPDATE BUTTON */}
+          {/* UPDATE */}
           <button onClick={() => markReviewed(a._id)}>
             Mark Reviewed
+          </button>
+
+          {/* DELETE */}
+          <button onClick={() => remove(a._id)}>
+            Delete
           </button>
         </div>
       ))}
